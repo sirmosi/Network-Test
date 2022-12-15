@@ -1,0 +1,70 @@
+version: '2'
+services:
+  # MongoDB: https://hub.docker.com/_/mongo/
+  mongodb:
+    image: mongo:4.2
+  #DB in share for persistence
+    volumes:
+      - mongo_data:/data/db
+  # Elasticsearch: https://www.elastic.co/guide/en/elasticsearch/reference/6.6/docker.html
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
+    #data folder in share for persistence
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    environment:
+      - http.host=0.0.0.0
+      - transport.host=localhost
+      - network.host=0.0.0.0
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: 1g
+  # Graylog: https://hub.docker.com/r/graylog/graylog/
+  graylog:
+    image: graylog/graylog:4.2
+    #journal and config directories in local NFS share for persistence
+    volumes:
+      - graylog_journal:/usr/share/graylog/data/journal
+    environment:
+      # CHANGE ME (must be at least 16 characters)!
+      - GRAYLOG_PASSWORD_SECRET=Q1iYEd0Xl2xKbWpW9vWLB5U0tX88P3Pya7EUsbGd02hzG6Mm5humwA5Vde10L39ruQocRpswxDnXO3OmScKqVhp6bjFWbNrb
+      # Password: admin
+      - GRAYLOG_ROOT_PASSWORD_SHA2=80219198d0ec1fa945e27376067d38ab0f0cdd09adb7b491d73d00efe6b11c4f
+      - GRAYLOG_HTTP_BIND_ADDRESS=0.0.0.0:9000
+      - GRAYLOG_HTTP_EXTERNAL_URI=http://192.168.120.73:9000/
+      - GRAYLOG_TRANSPORT_EMAIL_WEB_INTERFACE_URL=http://192.168.120.73:9000
+      - GRAYLOG_TRANSPORT_EMAIL_ENABLED=false
+      - GRAYLOG_TRANSPORT_EMAIL_PORT=25
+      - GRAYLOG_TRANSPORT_EMAIL_USE_AUTH=false
+      - GRAYLOG_TRANSPORT_EMAIL_USE_TLS=false
+      - GRAYLOG_TRANSPORT_EMAIL_USE_SSL=false
+      - GRAYLOG_TRANSPORT_FROM_EMAIL=mo.sharbaf@gmail.com
+      - GRAYLOG_TRANSPORT_SUBJECT_PREFIX=[graylog]
+    links:
+      - mongodb:mongo
+      - elasticsearch
+    depends_on:
+      - mongodb
+      - elasticsearch
+    ports:
+      # Graylog web interface and REST API
+      - 9000:9000
+      # Syslog TCP
+      - 8514:8514
+      # Syslog UDP
+      - 8514:8514/udp
+      # GELF TCP
+      - 12201:12201
+      # GELF UDP
+      - 12201:12201/udp
+# Volumes for persisting data, see https://docs.docker.com/engine/admin/volumes/volumes/
+volumes:
+  mongo_data:
+    driver: local
+  es_data:
+    driver: local
+  graylog_journal:
+    driver: local
