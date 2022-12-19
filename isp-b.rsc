@@ -32,7 +32,17 @@ add add-default-route=no disabled=no interface=ether1
 add action=mark-routing chain=prerouting disabled=yes dst-address=0.0.0.0/0 \
     new-routing-mark=test passthrough=yes
 /ip firewall nat
-add action=masquerade chain=srcnat to-addresses=192.168.120.1
+add action=masquerade chain=srcnat
+/ip firewall service-port
+set ftp disabled=yes
+set tftp disabled=yes
+set irc disabled=yes
+set h323 disabled=yes
+set sip disabled=yes
+set pptp disabled=yes
+set udplite disabled=yes
+set dccp disabled=yes
+set sctp disabled=yes
 /ip route
 add distance=1 gateway=192.168.120.1 routing-mark=test
 /ip traffic-flow
