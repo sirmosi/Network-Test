@@ -6,12 +6,10 @@
 /interface bridge
 add name=lobridge
 /interface vrrp
-add interface=ether2 name=vrrp1 vrid=50
-add interface=ether3 name=vrrp2 vrid=60
+add interface=ether2 name=vrrp1 priority=100 vrid=50
+add interface=ether3 name=vrrp2 priority=100 vrid=60
 /interface wireless security-profiles
 set [ find default=yes ] supplicant-identity=MikroTik
-/routing bgp instance
-set default as=100 disabled=yes
 /routing ospf area
 set [ find default=yes ] disabled=yes
 /routing ospf instance
@@ -56,5 +54,10 @@ add area=area2 network=172.16.2.0/24
 set time-zone-name=Asia/Tehran
 /system identity
 set name=B1
+/system logging
+set 0 action=remote
+set 1 action=remote
+set 2 action=remote
+set 3 action=remote
 /system ntp client
 set enabled=yes primary-ntp=169.19.200.129 secondary-ntp=121.174.142.81
