@@ -1,4 +1,4 @@
-# dec/15/2022 22:55:00 by RouterOS 6.46.5
+# dec/19/2022 23:13:59 by RouterOS 6.46.5
 # software id = 
 #
 #
@@ -10,13 +10,17 @@ add interface=ether2 name=vrrp1 vrid=50
 add interface=ether3 name=vrrp2 vrid=60
 /interface wireless security-profiles
 set [ find default=yes ] supplicant-identity=MikroTik
+/routing bgp instance
+set default as=100 disabled=yes
 /routing ospf area
 set [ find default=yes ] disabled=yes
 /routing ospf instance
 set [ find default=yes ] disabled=yes redistribute-connected=as-type-1 \
     router-id=1.1.1.1
-add name=ospf1 redistribute-connected=as-type-1 router-id=1.1.1.1
-add name=ospf2 redistribute-connected=as-type-1 router-id=1.1.1.1
+add name=ospf1 redistribute-connected=as-type-1 redistribute-other-ospf=\
+    as-type-1 router-id=1.1.1.1
+add name=ospf2 redistribute-connected=as-type-1 redistribute-other-ospf=\
+    as-type-1 router-id=1.1.1.1
 /routing ospf area
 add area-id=100.100.100.100 instance=ospf1 name=area1
 add area-id=200.200.200.200 instance=ospf2 name=area2

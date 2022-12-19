@@ -1,4 +1,4 @@
-# dec/15/2022 22:58:51 by RouterOS 6.46.5
+# dec/19/2022 23:11:44 by RouterOS 6.46.5
 # software id = 
 #
 #
@@ -14,8 +14,10 @@ set [ find default=yes ] supplicant-identity=MikroTik
 set [ find default=yes ] disabled=yes
 /routing ospf instance
 set [ find default=yes ] disabled=yes
-add name=ospf1 redistribute-connected=as-type-1 router-id=2.2.2.2
-add name=ospf2 redistribute-connected=as-type-1 router-id=2.2.2.2
+add name=ospf1 redistribute-connected=as-type-1 redistribute-other-ospf=\
+    as-type-1 router-id=2.2.2.2
+add name=ospf2 redistribute-connected=as-type-1 redistribute-other-ospf=\
+    as-type-1 router-id=2.2.2.2
 /routing ospf area
 add area-id=100.100.100.100 instance=ospf1 name=area1
 add area-id=200.200.200.200 instance=ospf2 name=area2
@@ -30,6 +32,7 @@ add address=172.16.1.200/24 interface=ether1 network=172.16.1.0
 add address=172.16.2.200/24 interface=ether4 network=172.16.2.0
 add address=2.2.2.2 interface=lobridge network=2.2.2.2
 /ip dhcp-client
+add disabled=no interface=ether3
 add disabled=no interface=ether2
 /ip traffic-flow
 set enabled=yes
