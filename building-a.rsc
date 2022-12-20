@@ -1,4 +1,4 @@
-# dec/19/2022 23:13:59 by RouterOS 6.46.5
+# dec/20/2022 08:58:57 by RouterOS 6.46.5
 # software id = 
 #
 #
@@ -6,8 +6,8 @@
 /interface bridge
 add name=lobridge
 /interface vrrp
-add interface=ether2 name=vrrp1 priority=100 vrid=50
-add interface=ether3 name=vrrp2 priority=100 vrid=60
+add interface=ether2 name=vrrp1 vrid=50
+add interface=ether3 name=vrrp2 vrid=60
 /interface wireless security-profiles
 set [ find default=yes ] supplicant-identity=MikroTik
 /routing ospf area
@@ -15,13 +15,13 @@ set [ find default=yes ] disabled=yes
 /routing ospf instance
 set [ find default=yes ] disabled=yes redistribute-connected=as-type-1 \
     router-id=1.1.1.1
-add name=ospf1 redistribute-connected=as-type-1 redistribute-other-ospf=\
-    as-type-1 router-id=1.1.1.1
-add name=ospf2 redistribute-connected=as-type-1 redistribute-other-ospf=\
-    as-type-1 router-id=1.1.1.1
+add name=ospf1 redistribute-connected=as-type-1 router-id=1.1.1.1
+add name=ospf2 redistribute-connected=as-type-1 router-id=1.1.1.1
 /routing ospf area
 add area-id=100.100.100.100 instance=ospf1 name=area1
 add area-id=200.200.200.200 instance=ospf2 name=area2
+/system logging action
+set 3 remote=192.168.120.73
 /ip address
 add address=10.10.1.2/24 interface=ether2 network=10.10.1.0
 add address=10.10.1.100 interface=vrrp1 network=10.10.1.100

@@ -1,4 +1,4 @@
-# dec/19/2022 23:17:21 by RouterOS 6.46.5
+# dec/20/2022 08:59:30 by RouterOS 6.46.5
 # software id = 
 #
 #
@@ -9,7 +9,8 @@ add name=lobridge
 /interface wireless security-profiles
 set [ find default=yes ] supplicant-identity=MikroTik
 /routing bgp instance
-set default as=20 redistribute-static=yes router-id=4.4.4.4
+set default as=20 redistribute-connected=yes redistribute-static=yes \
+    router-id=4.4.4.4
 /routing ospf area
 set [ find default=yes ] disabled=yes
 /routing ospf instance
@@ -26,8 +27,7 @@ add bridge=bridge1 interface=ether3
 /ip address
 add address=172.16.2.1/24 interface=bridge1 network=172.16.2.0
 add address=4.4.4.4 interface=lobridge network=4.4.4.4
-/ip dhcp-client
-add add-default-route=no disabled=no interface=ether1
+add address=192.168.120.61/24 interface=ether1 network=192.168.120.0
 /ip firewall mangle
 add action=mark-routing chain=prerouting disabled=yes dst-address=0.0.0.0/0 \
     new-routing-mark=test passthrough=yes
@@ -44,7 +44,7 @@ set udplite disabled=yes
 set dccp disabled=yes
 set sctp disabled=yes
 /ip route
-add distance=1 gateway=192.168.120.1 routing-mark=test
+add distance=1 gateway=192.168.120.1
 /ip traffic-flow
 set enabled=yes
 /ip traffic-flow target
@@ -54,7 +54,7 @@ set enabled=yes lsr-id=4.4.4.4 transport-address=4.4.4.4
 /mpls ldp interface
 add interface=bridge1
 /routing bgp peer
-add default-originate=always name=peer-to-isp1 remote-address=172.16.1.1 \
+add default-originate=always name=peer-to-isp1 remote-address=192.168.120.58 \
     remote-as=10
 /routing ospf network
 add area=area2 network=172.16.2.0/24

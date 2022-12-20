@@ -1,4 +1,4 @@
-# dec/19/2022 23:16:13 by RouterOS 6.46.5
+# dec/20/2022 08:59:40 by RouterOS 6.46.5
 # software id = 
 #
 #
@@ -28,8 +28,7 @@ set use-ip-firewall=yes
 /ip address
 add address=172.16.1.1/24 interface=bridge1 network=172.16.1.0
 add address=3.3.3.3 interface=lobridge network=3.3.3.3
-/ip dhcp-client
-add add-default-route=no disabled=no interface=ether1
+add address=192.168.120.58/24 interface=ether1 network=192.168.120.0
 /ip firewall nat
 add action=masquerade chain=srcnat
 /ip firewall service-port
@@ -53,7 +52,7 @@ set enabled=yes lsr-id=3.3.3.3 transport-address=3.3.3.3
 /mpls ldp interface
 add interface=bridge1
 /routing bgp peer
-add default-originate=always name=peer-to-isp2 remote-address=172.16.2.1 \
+add default-originate=always name=peer-to-isp2 remote-address=192.168.120.61 \
     remote-as=20
 /routing ospf network
 add area=area1 network=172.16.1.0/24
