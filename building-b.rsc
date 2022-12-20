@@ -13,7 +13,8 @@ set [ find default=yes ] supplicant-identity=MikroTik
 /routing ospf area
 set [ find default=yes ] disabled=yes
 /routing ospf instance
-set [ find default=yes ] disabled=yes
+set [ find default=yes ] disabled=yes redistribute-connected=as-type-1 \
+    router-id=2.2.2.2
 add name=ospf1 redistribute-connected=as-type-1 router-id=2.2.2.2
 add name=ospf2 redistribute-connected=as-type-1 router-id=2.2.2.2
 /routing ospf area
@@ -29,9 +30,8 @@ add address=10.20.1.100 interface=vrrp2 network=10.20.1.100
 add address=172.16.1.200/24 interface=ether1 network=172.16.1.0
 add address=172.16.2.200/24 interface=ether4 network=172.16.2.0
 add address=2.2.2.2 interface=lobridge network=2.2.2.2
-/ip dhcp-client
-add disabled=no interface=ether3
-add disabled=no interface=ether2
+/ip firewall nat
+add action=masquerade chain=srcnat disabled=yes
 /ip traffic-flow
 set enabled=yes
 /ip traffic-flow target

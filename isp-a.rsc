@@ -9,7 +9,8 @@ add name=lobridge
 /interface wireless security-profiles
 set [ find default=yes ] supplicant-identity=MikroTik
 /routing bgp instance
-set default as=10 router-id=3.3.3.3
+set default as=10 redistribute-connected=yes redistribute-static=yes \
+    router-id=3.3.3.3
 /routing ospf area
 set [ find default=yes ] disabled=yes
 /routing ospf instance
