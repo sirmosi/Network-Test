@@ -30,8 +30,6 @@ add address=10.20.1.2/24 interface=ether3 network=10.20.1.0
 add address=172.16.1.100/24 interface=ether4 network=172.16.1.0
 add address=172.16.2.100/24 interface=ether1 network=172.16.2.0
 add address=1.1.1.1 interface=lobridge network=1.1.1.1
-/ip firewall nat
-add action=masquerade chain=srcnat disabled=yes
 /ip traffic-flow
 set enabled=yes
 /ip traffic-flow target
