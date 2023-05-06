@@ -6,8 +6,6 @@
 /interface bridge
 add name=bridge1
 add name=lobridge
-/interface wireless security-profiles
-set [ find default=yes ] supplicant-identity=MikroTik
 /routing bgp instance
 set default as=20 redistribute-connected=yes redistribute-static=yes \
     router-id=4.4.4.4
@@ -20,14 +18,14 @@ add distribute-default=always-as-type-1 name=ospf2 redistribute-connected=\
 /routing ospf area
 add area-id=200.200.200.200 instance=ospf2 name=area2
 /system logging action
-set 3 remote=192.168.120.73 remote-port=8514
+set 3 remote=127.0.0.1 remote-port=8514
 /interface bridge port
-add bridge=bridge1 interface=ether2
 add bridge=bridge1 interface=ether3
+add bridge=bridge1 interface=ether4
 /ip address
 add address=172.16.2.1/24 interface=bridge1 network=172.16.2.0
 add address=4.4.4.4 interface=lobridge network=4.4.4.4
-add address=192.168.120.61/24 interface=ether1 network=192.168.120.0
+add address=192.168.120.61/24 interface=ether5 network=192.168.120.0
 /ip firewall mangle
 add action=mark-routing chain=prerouting disabled=yes dst-address=0.0.0.0/0 \
     new-routing-mark=test passthrough=yes
@@ -46,9 +44,9 @@ set sctp disabled=yes
 /ip route
 add distance=1 gateway=192.168.120.1
 /ip traffic-flow
-set enabled=yes
+set cache-entries=64k enabled=yes
 /ip traffic-flow target
-add dst-address=192.168.120.73
+add dst-address=127.0.0.1
 /mpls ldp
 set enabled=yes lsr-id=4.4.4.4 transport-address=4.4.4.4
 /mpls ldp interface
@@ -60,8 +58,6 @@ add default-originate=always name=peer-to-isp1 remote-address=192.168.120.58 \
 add area=area2 network=172.16.2.0/24
 /system clock
 set time-zone-name=Asia/Tehran
-/system identity
-set name=ISP2
 /system logging
 set 0 action=remote
 set 1 action=remote
